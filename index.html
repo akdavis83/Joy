@@ -78,14 +78,23 @@
 .scrollable-text::-webkit-scrollbar-track {
 	background-color: #f9f9f9;
 }		
-			#scrollable-text-container {
+		#scrollable-text-container {
   overflow-y: auto; /* enable vertical scrolling */
   height: 300px; /* adjust the height to your liking */
   padding: 10px;
   border: 1px solid #ddd;
-  margin: 0 auto; /* add this to center the container horizontally */
+  margin: 0 auto; /* center the container horizontally */
   width: 80%; /* adjust the width to your liking (e.g., 80% of the page width) */
   text-align: center; /* center the text inside the container */
+}
+
+#scrollable-text {
+  z-index: 0; /* initial z-index */
+  position: relative; /* required for z-index to work */
+}
+
+.scrolling #scrollable-text {
+  z-index: 100; /* higher z-index when scrolling */
 }
 		</style>
 	</head>
@@ -108,7 +117,20 @@
 		<script src="js/gpgpu/MixShader.js"></script>
 
 		<script src="js/AudioAnalyser.js"></script>
+<script>
+	const scrollableTextContainer = document.getElementById('scrollable-text-container');
+const scrollableText = document.getElementById('scrollable-text');
 
+scrollableTextContainer.addEventListener('scroll', () => {
+  scrollableTextContainer.classList.add('scrolling');
+});
+
+scrollableTextContainer.addEventListener('scroll', () => {
+  if (scrollableTextContainer.scrollTop + scrollableTextContainer.offsetHeight >= scrollableTextContainer.scrollHeight) {
+    scrollableTextContainer.classList.remove('scrolling');
+  }
+});
+</script>
 		<script id="vs-render" type="x-shader/x-vertex">
 
 			uniform sampler2D map;
